@@ -1,13 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import config from './config.js';
-import phoneEntry from './schemas/phoneEntry.js';
+import phoneEntryModel from './schemas/phoneEntry.js';
 import validator from 'express-validator';
+import cors from 'cors';
+
 const { check } = validator;
 
 const app = express();
 
 app.use(express.json());
+
+app.options('*', cors())
 
 app.get('/', (req, res) => res.status(200).end());
 
@@ -17,7 +21,7 @@ app.post('/newPhone', [
   check('phoneNumber').not().isEmpty().trim().escape()
 ], async (req, res) => {
   const {firstName, lastName, phoneNumber} = req.body;
-  const phoneEntryModel = mongoose.model("phoneEntry", phoneEntry);
+  
   const newEntry = new phoneEntryModel({
     firstName : firstName,
     lastName : lastName,
@@ -36,6 +40,40 @@ app.post('/newPhone', [
     res.sendStatus(500);
   }
 });
+
+app.patch('/update/:id', [
+  check('firstName').optional({nullable : true, checkFalsy : true}).trim().escape(), 
+  check('lastName').optional({nullable : true, checkFalsy : true}).trim().escape(), 
+  check('phoneNumber').optional({nullable : true, checkFalsy : true}).trim().escape()
+], async (req, res) => {
+  const id = req.params.id;
+  const {firstName, lastName, phoneNumber} = req.body;
+  var updateData = {};
+
+  if(firstName) {
+    Object.assign(updateData, {firstName : firstName})
+  }
+  if (lastName) {
+    Object.assign(updateData, {lastName : lastName})
+  }
+  if (phoneNumber) {
+    Object.assign(updateData, {phoneNumber : phoneNumber})
+  }
+
+  try {
+    const conn = await mongoose.connect(config.dbUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+   
+    const updatedEntry = await phoneEntryModel.findByIdAndUpdate(id, updateData, {new : true, runValidators : true})
+
+    mongoose.connection.close();
+    res.send(updatedEntry);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+})
 
 //do an app put to update existing document, use find one by id to choose which to update
 

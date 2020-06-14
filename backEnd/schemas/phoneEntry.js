@@ -8,4 +8,6 @@ const phoneEntry = new Schema({
     phoneNumber : String
 });
 
-export default phoneEntry;
+const phoneEntryModel = mongoose.model("phoneEntry", phoneEntry);
+
+export default phoneEntryModel;
