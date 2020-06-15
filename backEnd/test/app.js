@@ -88,6 +88,13 @@ describe("Testing the phonebook api", () => {
             });
         });
 
+        it("test empty query list to send status 500", function(done) {
+            request(`${url}list/`, (error, response, body) => {
+                expect(response.statusCode).to.equal(500);
+                done();
+            });
+        });
+
 
         it("Retuns a status 200 and the modified document on patch", function(done) {
             const optionsUpdate = {
