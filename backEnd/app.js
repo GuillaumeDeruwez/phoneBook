@@ -35,7 +35,7 @@ app.post('/newPhone', [
     });
     const newDocument = await newEntry.save();
     mongoose.connection.close();
-    res.send(newDocument);
+    res.status(201).send(newDocument);
   } catch (error) {
     res.sendStatus(500);
   }
@@ -63,7 +63,8 @@ app.patch('/update/:id', [
   try {
     const conn = await mongoose.connect(config.dbUri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useFindAndModify : false
     });
    
     const updatedEntry = await phoneEntryModel.findByIdAndUpdate(id, updateData, {new : true, runValidators : true})
@@ -75,9 +76,26 @@ app.patch('/update/:id', [
   }
 })
 
-//do an app put to update existing document, use find one by id to choose which to update
+app.get('/list/', [check('search').not().isEmpty().trim().escape()], async (req, res) => {
+  const search = req.query.search;
+  try {
+    const conn = await mongoose.connect(config.dbUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+   
+    const searchResults = await phoneEntryModel.find({$or : [{ firstName : search }, {lastName: search }, {phoneNumber : search}]});
 
-// do an app get to find document and return them.
+    mongoose.connection.close();
+    if (searchResults.length === 0) {
+      res.sendStatus(204);
+    } else {
+      res.send(JSON.stringify(searchResults));
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
+})
 
 app.get('/testConnection', async (req, res) => {
   try {
