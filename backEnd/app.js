@@ -15,7 +15,7 @@ app.options('*', cors())
 
 app.get('/', (req, res) => res.status(200).end());
 
-app.post('/newPhone', [
+app.post('/newPhone', [ cors(),
   check('firstName').not().isEmpty().trim().escape(),
   check('lastName').not().isEmpty().trim().escape(),
   check('phoneNumber').not().isEmpty().trim().escape()
