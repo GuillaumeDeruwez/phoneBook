@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Search from '@material-ui/icons/Search';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios';
 import config from '../config.js';
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, InputAdornment } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from "react-router-dom";
+import useStyles from '../styles/general';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-    },
-}));
 
 function generate(array) {
     return array.map((value) => {

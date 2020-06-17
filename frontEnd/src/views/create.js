@@ -1,27 +1,9 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import config from '../config.js';
-import { Button } from '@material-ui/core';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-            width: '50vw',
-        },
-    },
-    contained: {
-        width: "25ch"
-    }
-}));
-
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import { Button, TextField, Snackbar } from '@material-ui/core';
+import Alert from '../components/alert';
+import useStyles from '../styles/general';
 
 function Create() {
     const classes = useStyles();
