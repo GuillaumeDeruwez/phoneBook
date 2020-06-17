@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import config from '../config.js';
-import { Button, TextField, Snackbar } from '@material-ui/core';
-import Alert from '../components/alert';
+import { Button, TextField } from '@material-ui/core';
 import useStyles from '../styles/general';
+import SnackBarHook from '../components/SnackBar';
+import AppBarCustom from '../components/AppBar';
 
 function Create() {
     const classes = useStyles();
+    const [setOpen, SnackBarComponent] = SnackBarHook();
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
         phoneNumber: ""
     });
-    const [open, setOpen] = useState(false);
     const [message, setMessage] = useState({message : "", severity : "error"});
-
-    function handleClose() {
-        setOpen(false);
-    }
 
     async function submitForm(e) {
         e.preventDefault();
@@ -39,6 +36,10 @@ function Create() {
 
     return (
         <div>
+            <AppBarCustom
+                title="Create a new entry"
+                link={{ url: "/", linkName: "Home" }}
+            />
             <form className={classes.root} autoComplete="off" onSubmit={(e) => submitForm(e)}>
                 <TextField required label="First Name" name="firstName" value={form.firstName} onChange={(e) => handleInput(e)} />
                 <br />
@@ -50,11 +51,7 @@ function Create() {
                 <br />
                 <Button className={classes.contained} type="submit" variant="contained" color="primary">Create new entry</Button>
             </form>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={message.severity}>
-                    {message.message}
-                </Alert>
-            </Snackbar>
+            <SnackBarComponent message={message} />
         </div>
     );
 }

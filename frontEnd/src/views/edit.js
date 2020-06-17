@@ -6,6 +6,7 @@ import axios from 'axios';
 import config from '../config.js';
 import Alert from '../components/alert';
 import useStyles from '../styles/general';
+import AppBarCustom from '../components/AppBar';
 
 function Edit() {
     const classes = useStyles();
@@ -43,6 +44,10 @@ function Edit() {
 
     return (
         <div>
+            <AppBarCustom
+                title="Edit an entry"
+                link={{ url: "/", linkName: "Home" }}
+            />
             <form className={classes.root} autoComplete="off" onSubmit={(e) => submitForm(e)}>
                 <TextField required label="First Name" name="firstName" value={form.firstName} onChange={(e) => handleInput(e)} />
                 <br />
