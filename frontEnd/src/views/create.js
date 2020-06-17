@@ -40,7 +40,7 @@ function Create() {
     async function submitForm(e) {
         e.preventDefault();
         try {
-            const response = await axios.post(`${config.serverURL}newPhone`, form);
+            await axios.post(`${config.serverURL}newPhone`, form);
             setMessage({message : "Entry succesfully created", severity : "success"});
             setOpen(true);
         } catch (error) {

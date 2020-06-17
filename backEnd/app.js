@@ -46,7 +46,7 @@ app.post('/newPhone', [ cors(),
   }
 });
 
-app.patch('/update/:id', [
+app.patch('/update/:id', [cors(),
   check('id').not().isEmpty().trim().escape(),
   check('firstName').optional({ nullable: true, checkFalsy: true }).trim().escape(),
   check('lastName').optional({ nullable: true, checkFalsy: true }).trim().escape(),
@@ -87,7 +87,7 @@ app.patch('/update/:id', [
   }
 })
 
-app.get('/list/', [check('search').not().isEmpty().trim().escape()], async (req, res) => {
+app.get('/list/', [cors(), check('search').not().isEmpty().trim().escape()], async (req, res) => {
   try {
     const result = validationResult(req);
     const hasErrors = !result.isEmpty();

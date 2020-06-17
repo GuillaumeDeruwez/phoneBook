@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-    useParams
+    useLocation
   } from "react-router-dom";
+import { Button } from '@material-ui/core';
 
 function Edit() {
-    let {id} = useParams();
+    const data = useLocation();
     return (
         <div>
-            test edit {id}
+            {data.state.value.firstName}
         </div>
     );
 }

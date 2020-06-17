@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route path="/edit/:id">
+          <Route path="/edit">
             <Edit />
           </Route>
           <Route path="/create">

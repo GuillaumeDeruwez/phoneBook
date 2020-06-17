@@ -5,6 +5,9 @@ import Search from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import axios from 'axios';
 import config from '../config.js';
+import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,11 +18,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function generate(array) {
+    return array.map((value) => {
+        return <ListItem divider key={value._id}>
+            <ListItemText primary={`${value.lastName} ${value.firstName}`} secondary={value.phoneNumber} />
+            <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="edit" component={Link} to={{
+                            pathname: "/edit",
+                            state: { value }
+                        }}>
+                    <EditIcon />
+                </IconButton>
+            </ListItemSecondaryAction>
+        </ListItem>
+    });
+}
+
 export default function Home() {
     const classes = useStyles();
     const [searchTerm, setSearchTerm] = useState();
     const [inputError, setInputError] = useState(false);
     const [helperText, setHelperText] = useState("");
+    const [arrayEntries, setArrayEntries] = useState([]);
 
     function handleSearchInput(e) {
         let trimmed = e.target.value.trimLeft();
@@ -51,7 +71,7 @@ export default function Home() {
         if (!inputError) {
             try {
                 let response = await axios.get(`${config.serverURL}list/?search=${searchTerm}`);
-                console.log(response);
+                setArrayEntries(response.data);
             } catch (error) {
                 console.log(error);
             }
@@ -70,7 +90,11 @@ export default function Home() {
                 }} />
             </form>
             <div>
-                {searchTerm}
+                <List>
+                    {
+                        generate(arrayEntries)
+                    }
+                </List>
             </div>
         </div>
     );
