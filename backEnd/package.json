@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.5.0",
     "mongoose": "^5.9.18"
@@ -24,6 +25,9 @@
   "license": "ISC",
   "directories": {
     "test": "tests"
+  },
+  "engines": {
+    "node": "12.18.0"
   },
   "description": ""
 }
