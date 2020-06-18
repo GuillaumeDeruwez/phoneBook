@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import {useLocation} from "react-router-dom";
 import { Button, TextField, Snackbar } from '@material-ui/core';
 import axios from 'axios';
-import config from '../config.js';
 import Alert from '../components/alert';
 import useStyles from '../styles/general';
 import AppBarCustom from '../components/AppBar';
@@ -26,7 +25,7 @@ function Edit() {
     async function submitForm(e) {
         e.preventDefault();
         try {
-            await axios.patch(`${config.serverURL}update/${data.state.value._id}`, form);
+            await axios.patch(`${process.env.REACT_APP_SERVER_URL}update/${data.state.value._id}`, form);
             setMessage({message : "Entry succesfully modified", severity : "success"});
             setOpen(true);
         } catch (error) {

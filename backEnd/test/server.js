@@ -3,9 +3,12 @@ const { expect } = chai;
 import request from "request";
 import mongoose from 'mongoose';
 import phoneEntryModel from '../schemas/phoneEntry.js';
-import config from '../config.js';
+import dotenv from "dotenv";
+
+dotenv.config()
 
 const url = "http://localhost:3000/";
+const dbURL = process.env.DATABASE_URL;
 
 describe("Testing the phonebook api", () => {
 
@@ -34,7 +37,7 @@ describe("Testing the phonebook api", () => {
         // delete created and update document once test are done running to avoid polluting database
         after(async () => {
             try {
-                const conn = await mongoose.connect(config.dbUri, {
+                const conn = await mongoose.connect(dbURL, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                     useFindAndModify: false
@@ -42,7 +45,7 @@ describe("Testing the phonebook api", () => {
                 const deleted = await phoneEntryModel.findByIdAndDelete(id);
                 mongoose.connection.close(); 
             } catch (error) {
-                console.log(error);
+                console.log(`this is the error : ${error}`)
             }
         });
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import config from '../config.js';
 import { Button, TextField } from '@material-ui/core';
 import useStyles from '../styles/general';
 import SnackBarHook from '../components/SnackBar';
@@ -19,7 +18,7 @@ function Create() {
     async function submitForm(e) {
         e.preventDefault();
         try {
-            await axios.post(`${config.serverURL}newPhone`, form);
+            await axios.post(`${process.env.REACT_APP_SERVER_URL}newPhone`, form);
             setMessage({message : "Entry succesfully created", severity : "success"});
             setOpen(true);
         } catch (error) {
