@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import axios from 'axios';
-import config from '../config.js';
 import { List, Typography, InputBase } from '@material-ui/core';
 import useStyles from '../styles/general';
 import useStylesAppBar from '../styles/appbar';
@@ -47,7 +46,7 @@ export default function Home() {
         e.preventDefault();
         if (!inputError && searchTerm) {
             try {
-                let response = await axios.get(`${config.serverURL}list/?search=${searchTerm}`);
+                let response = await axios.get(`${process.env.REACT_APP_SERVER_URL}list/?search=${searchTerm}`);
                 setArrayEntries(response.data);
             } catch (error) {
                 console.log(error);

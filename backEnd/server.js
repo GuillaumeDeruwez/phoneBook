@@ -1,11 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose';
-import config from './config.js';
 import phoneEntryModel from './schemas/phoneEntry.js';
 import validator from 'express-validator';
 import cors from 'cors';
 
 const { check, validationResult } = validator;
+const port = process.env.PORT;
+const url = process.env.DATABASE_URL;
 
 const app = express();
 
@@ -34,11 +35,21 @@ app.post('/newPhone', [ cors(),
       phoneNumber: phoneNumber
     });
 
-    const conn = await mongoose.connect(config.dbUri, {
+    
+
+    const conn = await mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-    const newDocument = await newEntry.save();
+
+    const check = await  phoneEntryModel.find({
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber
+    });
+    if (check.length > 0) {
+      const newDocument = await newEntry.save();
+    }
     mongoose.connection.close();
     res.status(201).send(newDocument);
   } catch (error) {
@@ -72,7 +83,7 @@ app.patch('/update/:id', [cors(),
       Object.assign(updateData, { phoneNumber: phoneNumber })
     }
 
-    const conn = await mongoose.connect(config.dbUri, {
+    const conn = await mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false
@@ -95,7 +106,7 @@ app.get('/list/', [cors(), check('search').not().isEmpty().trim().escape()], asy
 
     const search = req.query.search;
 
-    const conn = await mongoose.connect(config.dbUri, {
+    const conn = await mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -115,7 +126,7 @@ app.get('/list/', [cors(), check('search').not().isEmpty().trim().escape()], asy
 
 app.get('/testConnection', async (req, res) => {
   try {
-    const conn = await mongoose.connect(config.dbUri, {
+    const conn = await mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -127,4 +138,4 @@ app.get('/testConnection', async (req, res) => {
   }
 })
 
-app.listen(3000, () => console.log("server starting on port 3000!"));
+app.listen(port, () => console.log("server starting on port 3000!"));
