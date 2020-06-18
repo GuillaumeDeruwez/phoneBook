@@ -19,7 +19,8 @@
     "request": "^2.88.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
